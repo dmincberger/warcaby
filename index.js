@@ -1,7 +1,11 @@
-import { GameObject } from './src/modules/main';
+import { GameObject, } from './src/modules/main';
 import { allEvents } from "./src/modules/ui.js"
-window.addEventListener("load", function () {
-    GameObject.render()
+import { plansza } from "./src/modules/plansza"
 
+window.addEventListener("load", function () {
+    
+    plansza.generacja_plnaszy()
+
+    GameObject.render()
     allEvents.init()
 })

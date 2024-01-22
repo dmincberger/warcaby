@@ -1,6 +1,5 @@
 import { allNetFunctions } from "./net";
 const allEvents = {
-
     init() {
         let loginbt = document.getElementById("loginbt")
         let userName_field = document.getElementById("userName")
