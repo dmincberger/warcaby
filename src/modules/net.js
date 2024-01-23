@@ -2,7 +2,7 @@ import { GameObject } from "./main"
 const allNetFunctions = {
 
     loginUser(userName) {
-        
+        event.preventDefault()
         const data = JSON.stringify({
             userName: userName
         })
@@ -16,6 +16,7 @@ const allNetFunctions = {
         };
         fetch("/adduser", options)
             .then(response => {
+
                 if (!response.ok) {
                     console.log("CO SIE DZIEJE NO");
                     throw new Error('Network response was not ok');

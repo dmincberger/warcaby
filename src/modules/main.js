@@ -5,6 +5,16 @@ const container = document.getElementById('root')
 const scene = new Scene()
 const renderer = new Renderer(scene, container)
 const camera = new Camera(renderer.threeRenderer)
+const szachownica = [
+    [1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1],
+]
 
 const GameObject = {
 
@@ -19,4 +29,4 @@ const GameObject = {
 
 
 }
-export { GameObject, scene }
+export { GameObject, scene, szachownica }

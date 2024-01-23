@@ -21,7 +21,7 @@ app.post("/adduser", function (req, res) {
     } else {
         console.log("TABELA NIE PRZYJELJA: ", userName);
     }
-    res.send(JSON.stringify(req.body));
+    res.send(1);
 })
 
 app.listen(PORT, function () {
