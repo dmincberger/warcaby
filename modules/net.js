@@ -24,15 +24,15 @@ const allNetFunctions = {
                     return response.json();
                 })
                 .then(data => {
-                    if (data["odp"] === "dodany") {
-                        resolve(data); // Resolve the Promise with the data
+                    if (data["odp"] === "dodany" || data["odp"] === "istniejacy") {
+                        resolve(data);
                     } else {
-                        reject(new Error('Response not "dodany"')); // Reject if the response is not as expected
+                        reject(new Error('Response not "dodany"'));
                     }
                 })
                 .catch(error => {
                     console.error('Error during data save:', error);
-                    reject(error); // Reject with the error
+                    reject(error);
                 });
         });
     },

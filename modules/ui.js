@@ -1,4 +1,5 @@
 import { allNetFunctions } from "./net";
+import { plansza } from "./plansza";
 const allEvents = {
     async init() {
         let loginbt = document.getElementById("loginbt");
@@ -8,8 +9,7 @@ const allEvents = {
             let userName = userName_field.value;
             try {
                 let odpowiedz = await allNetFunctions.loginUser(userName);
-
-                allEvents.koniec(odpowiedz["odp"])
+                allEvents.koniec(odpowiedz)
             } catch (error) {
                 console.error("Error during login:", error);
             }
@@ -29,11 +29,13 @@ const allEvents = {
 
     koniec(odpowiedz) {
 
-        if (odpowiedz == "dodany") {
+        if (odpowiedz["odp"] == "dodany") {
             document.getElementById("logowanie").close()
-            console.log("pomyslnie dodany");
-        } else if (odpowiedz == "istniejacy") {
-
+            document.getElementById("status").innerHTML = "USER_ADDED"
+            document.getElementById("komunikat").innerHTML = `Witaj ${odpowiedz["userName"]}, grasz ${odpowiedz["kolor"]}`
+            plansza.generacja_pionkow()
+        } if (odpowiedz["odp"] == "istniejacy") {
+            document.getElementById("status").innerHTML = "Uzytkownik juz istnieje!"
         }
     }
 

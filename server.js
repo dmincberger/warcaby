@@ -26,7 +26,7 @@ app.post("/adduser", function (req, res) {
         }
         let odp = "dodany"
         let kolor = "test"
-        res.send(JSON.stringify({ odp: odp, kolor: kolor }))
+        res.send(JSON.stringify({ odp: odp, kolor: kolor, userName: userName }))
     } else {
         console.log("TABELA NIE PRZYJELJA: ", userName);
         let odp = "istniejacy"

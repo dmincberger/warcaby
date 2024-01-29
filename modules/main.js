@@ -16,6 +16,17 @@ const szachownica = [
     [0, 1, 0, 1, 0, 1, 0, 1],
 ]
 
+const pionki = [
+    [0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 2, 0, 2, 0, 2, 0, 2],
+    [2, 0, 2, 0, 2, 0, 2, 0]
+]
+
 const GameObject = {
 
     render() {
@@ -29,4 +40,4 @@ const GameObject = {
 
 
 }
-export { GameObject, scene, szachownica }
+export { GameObject, scene, szachownica, pionki }
