@@ -2,32 +2,39 @@ import { GameObject } from "./main"
 const allNetFunctions = {
 
     loginUser(userName) {
-        event.preventDefault()
-        const data = JSON.stringify({
-            userName: userName
-        })
-        console.log(userName);
-        const options = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: data
-        };
-        fetch("/adduser", options)
-            .then(response => {
-
-                if (!response.ok) {
-                    console.log("CO SIE DZIEJE NO");
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-            })
-            .catch(error => {
-                console.error('Error during data save:', error);
+        return new Promise((resolve, reject) => {
+            event.preventDefault();
+            const data = JSON.stringify({
+                userName: userName
             });
+            const options = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: data
+            };
+
+            fetch("/adduser", options)
+                .then(response => {
+                    if (!response.ok) {
+                        console.log("CO SIE DZIEJE NO");
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data["odp"] === "dodany") {
+                        resolve(data); // Resolve the Promise with the data
+                    } else {
+                        reject(new Error('Response not "dodany"')); // Reject if the response is not as expected
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during data save:', error);
+                    reject(error); // Reject with the error
+                });
+        });
     },
 
     resetUsers() {

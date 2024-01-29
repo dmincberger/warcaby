@@ -1,22 +1,40 @@
 import { allNetFunctions } from "./net";
 const allEvents = {
-    init() {
-        let loginbt = document.getElementById("loginbt")
-        let userName_field = document.getElementById("userName")
-        loginbt.addEventListener("click", function () {
-            let userName = userName_field.value
-            allNetFunctions.loginUser(userName)
-        })
+    async init() {
+        let loginbt = document.getElementById("loginbt");
+        let userName_field = document.getElementById("userName");
 
-        let resetbt = document.getElementById("resetbt")
-        resetbt.addEventListener("click", function () {
+        loginbt.addEventListener("click", async function () {
+            let userName = userName_field.value;
+            try {
+                let odpowiedz = await allNetFunctions.loginUser(userName);
 
-            console.log("resetBt");
+                allEvents.koniec(odpowiedz["odp"])
+            } catch (error) {
+                console.error("Error during login:", error);
+            }
+        });
 
-            allNetFunctions.resetUsers()
-        })
+        let resetbt = document.getElementById("resetbt");
+        resetbt.addEventListener("click", async function () {
+            try {
+                console.log("resetBt");
+                let resetData = await allNetFunctions.resetUsers();
 
+            } catch (error) {
+                console.error("Error during reset:", error);
+            }
+        });
+    },
 
+    koniec(odpowiedz) {
+
+        if (odpowiedz == "dodany") {
+            document.getElementById("logowanie").close()
+            console.log("pomyslnie dodany");
+        } else if (odpowiedz == "istniejacy") {
+
+        }
     }
 
 }
