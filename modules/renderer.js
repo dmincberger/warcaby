@@ -6,7 +6,7 @@ export default class Renderer {
         this.scene = scene;
         this.container = container;
         this.threeRenderer = new WebGLRenderer({ antialias: true });
-        this.threeRenderer.setClearColor(0xffffff);
+        this.threeRenderer.setClearColor(0x000000);
         this.container.appendChild(this.threeRenderer.domElement);
         this.updateSize();
 
@@ -21,4 +21,9 @@ export default class Renderer {
     render(scene, camera) {
         this.threeRenderer.render(scene, camera);
     }
+
+    UpdateCamera(renderer) {
+        this.threeCamera.position.set(20, 10, 5)
+    }
+
 }

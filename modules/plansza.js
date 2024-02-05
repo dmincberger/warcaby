@@ -1,10 +1,6 @@
 import { PlaneGeometry, AxesHelper, Mesh, MeshBasicMaterial, DoubleSide, BoxGeometry, TextureLoader } from 'three'
 import { scene, szachownica, pionki } from './main'
 import Pionek from './pionek'
-console.log(Pionek);
-let warcab = new Pionek(scene)
-
-warcab.ustaw_kolor(0x000000)
 let plansza = {
     generacja_planszy() {
         let linie = new AxesHelper(100)
@@ -23,17 +19,28 @@ let plansza = {
         scene.add(linie)
     },
     generacja_pionkow() {
-        let kolory = [0x000000, 0xffffff]
-        for (let i = 0; i < 8; i++) {
-            for (let j = 0; j < 8; j++) {
-                let kolor = kolory[pionki[i][j] - 1]
-                let warcab = new Pionek(scene)
-                console.log("test ile");
-                warcab.ustaw_kolor(kolor)
-                warcab.position.set(j, 1.2, i)
-                scene.add(warcab)
-            }
-        }
+        let count_r = 0
+        let count_col = 0
+        pionki.forEach((row) => {
+            count_col = 0
+            row.forEach((col) => {
+                if (col != 0) {
+                    let warcab = new Pionek(scene)
+                    console.log("test ile " + col);
+                    if (col == 1) {
+                        warcab.material.color.set(0, 0, 0)
+                    }
+                    if (col == 2) {
+                        warcab.material.color.set(255, 255, 255)
+                    }
+                    warcab.position.set(count_r, 1.2, count_col)
+                    scene.add(warcab)
+                }
+                count_col += 1
+            })
+            count_r += 1
+        })
+        console.log(scene);
     }
 }
 

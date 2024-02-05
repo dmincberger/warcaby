@@ -1,5 +1,7 @@
 import { allNetFunctions } from "./net";
+import { Camera } from './camera.js'
 import { plansza } from "./plansza";
+import { GameObject } from "./main";
 const allEvents = {
     async init() {
         let loginbt = document.getElementById("loginbt");
@@ -34,7 +36,17 @@ const allEvents = {
             document.getElementById("status").innerHTML = "USER_ADDED"
             document.getElementById("komunikat").innerHTML = `Witaj ${odpowiedz["userName"]}, grasz ${odpowiedz["kolor"]}`
             plansza.generacja_pionkow()
-        } if (odpowiedz["odp"] == "istniejacy") {
+        }
+
+        if (odpowiedz["odp"] == "drugi") {
+            document.getElementById("logowanie").close()
+            document.getElementById("status").innerHTML = "USER_ADDED"
+            document.getElementById("komunikat").innerHTML = `Witaj ${odpowiedz["userName"]}, grasz ${odpowiedz["kolor"]}`
+            plansza.generacja_pionkow()
+            GameObject.UpdateCamera()
+        }
+
+        if (odpowiedz["odp"] == "istniejacy") {
             document.getElementById("status").innerHTML = "Uzytkownik juz istnieje!"
         }
     }

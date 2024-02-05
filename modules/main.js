@@ -36,8 +36,12 @@ const GameObject = {
 
         requestAnimationFrame(GameObject.render);
 
-    }
+    },
 
+    UpdateCamera() {
+        camera.threeCamera.position.set(20, 10, 5)
+        console.log("mog");
+    }
 
 }
 export { GameObject, scene, szachownica, pionki }

@@ -4,13 +4,10 @@ import { scene, szachownica } from './main'
 export default class Pionek {
     constructor(scene) {
         this.scene = scene
-        this.geometry = new CylinderGeometry(1, 1, 1)
+        this.geometry = new CylinderGeometry(0.2, 0.2, 0.2)
         this.material = new MeshBasicMaterial({ color: 0x0fa546 })
         const pion = new Mesh(this.geometry, this.material)
         return pion
-    }
-    ustaw_kolor(kolor) {
-        this.material.color.setHex(kolor)
     }
 
 }
