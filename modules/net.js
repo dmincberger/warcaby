@@ -1,4 +1,5 @@
 import { GameObject } from "./main"
+import { allEvents } from "./ui"
 const allNetFunctions = {
 
     loginUser(userName) {
@@ -22,12 +23,13 @@ const allNetFunctions = {
                         throw new Error('Network response was not ok');
                     }
                     return response.json();
-                }) 
+                })
                 .then(data => {
-                    if (data["odp"] === "dodany" || data["odp"] === "istniejacy") {
+                    console.log(data);
+                    if (data["odp"] === "dodany" || data["odp"] === "drugi" || data["odp"] === "duzo") {
                         resolve(data);
                     } else {
-                        reject(new Error('Response not "dodany"'));
+                        reject(new Error('Response not "dodany" or drugi'));
                     }
                 })
                 .catch(error => {
@@ -47,6 +49,28 @@ const allNetFunctions = {
             .catch(error => console.log(error));
 
 
+    },
+
+    waitplayer() {
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        };
+        let oczekiwanie = setInterval(() => {
+            console.log("tescik?");
+            fetch("/waitplayer", options)
+                .then(response => response.json())
+                .then(data => {
+                    if (data["odp"] == "start") {
+                        clearInterval(oczekiwanie)
+                        allEvents.startgry()
+                        GameObject.Start_ruszania()
+                    }
+                })
+                .catch(error => console.log(error));
+        }, 1000);
     }
 
 }

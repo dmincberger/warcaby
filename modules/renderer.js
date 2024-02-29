@@ -19,11 +19,10 @@ export default class Renderer {
     }
 
     render(scene, camera) {
+
         this.threeRenderer.render(scene, camera);
     }
 
-    UpdateCamera(renderer) {
-        this.threeCamera.position.set(20, 10, 5)
-    }
+
 
 }

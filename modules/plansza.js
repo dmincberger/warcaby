@@ -1,32 +1,39 @@
 import { PlaneGeometry, AxesHelper, Mesh, MeshBasicMaterial, DoubleSide, BoxGeometry, TextureLoader } from 'three'
 import { scene, szachownica, pionki } from './main'
 import Pionek from './pionek'
+
+let bialy = new TextureLoader().load('./static/images/bialy.jpg')
+let czarny = new TextureLoader().load('./static/images/czarny.jpg')
+let material
 let plansza = {
     generacja_planszy() {
-        let linie = new AxesHelper(100)
-        let pola = []
-        pola.push(new MeshBasicMaterial({ side: DoubleSide, map: new TextureLoader().load('./static/images/czarny.jpg') }));
-        pola.push(new MeshBasicMaterial({ side: DoubleSide, map: new TextureLoader().load('./static/images/bialy.jpg') }));
         let ksztalt = new BoxGeometry(1, 0.2)
         for (let i = 0; i < 8; i++) {
             for (let j = 0; j < 8; j++) {
                 let typ_materialu = szachownica[i][j]
-                let kostka = new Mesh(ksztalt, pola[typ_materialu])
+                if (typ_materialu == 1) {
+                    material = new MeshBasicMaterial({ side: DoubleSide, map: bialy })
+                }
+                if (typ_materialu == 0) {
+                    material = new MeshBasicMaterial({ side: DoubleSide, map: czarny })
+                }
+                let kostka = new Mesh(ksztalt, material)
                 kostka.position.set(j, 1, i)
+                kostka.userData.identyfikator = "p:" + j + ":" + i
+                console.log("IDENTYFIKATOR PODCZAS TWORZENIA: " + kostka.userData.identyfikator);
                 scene.add(kostka)
             }
         }
-        scene.add(linie)
     },
-    generacja_pionkow() {
+    generacja_pionkow(odpowiedz) {
         let count_r = 0
         let count_col = 0
         pionki.forEach((row) => {
             count_col = 0
             row.forEach((col) => {
+
                 if (col != 0) {
                     let warcab = new Pionek(scene)
-                    console.log("test ile " + col);
                     if (col == 1) {
                         warcab.material.color.set(0, 0, 0)
                     }
@@ -34,7 +41,11 @@ let plansza = {
                         warcab.material.color.set(255, 255, 255)
                     }
                     warcab.position.set(count_r, 1.2, count_col)
+
+
+                    warcab.userData.identyfikator = "w:" + count_r + ":" + count_col
                     scene.add(warcab)
+
                 }
                 count_col += 1
             })

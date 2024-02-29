@@ -19,23 +19,38 @@ app.post("/adduser", function (req, res) {
     res.header("content-type", "application/json")
     let userName = req.body["userName"]
     if (!users.includes(userName)) {
+        console.log(users);
         console.log("DODANO DO TABELI: ", userName);
-        if (users.length > 2) { waiting_users.push(userName) }
         if (users.length == 0) {
+            console.log("no kurwa mac");
             let odp = "dodany"
-            let kolor = "test"
+            let kolor = "bialy"
+            users.push(userName)
             res.send(JSON.stringify({ odp: odp, kolor: kolor, userName: userName }))
         }
-        if (users.length == 1) {
+        else if (users.length == 1) {
+            console.log("kurwa v2");
             let odp = "drugi"
-            let kolor = "test"
+            let kolor = "czarny"
+            users.push(userName)
             res.send(JSON.stringify({ odp: odp, kolor: kolor, userName: userName }))
+        } else if (users.length > 1) {
+            let odp = "duzo"
+            users.push(userName)
+            res.send(JSON.stringify({ odp: odp }))
         }
     } else {
         console.log("TABELA NIE PRZYJELJA: ", userName);
         let odp = "istniejacy"
-        let kolor = "test"
         res.send(JSON.stringify({ odp: odp }))
+    }
+})
+
+app.post("/waitplayer", function (req, res) {
+    if (users.length > 1) {
+        res.send(JSON.stringify({ odp: "start" }))
+    } else {
+        res.send(JSON.stringify({ odp: "czekaj" }))
     }
 })
 
