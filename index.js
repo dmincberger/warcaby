@@ -11,4 +11,6 @@ window.addEventListener("load", function () {
     let logowanie = document.getElementById("logowanie")
     logowanie.showModal()
 
+
+
 })

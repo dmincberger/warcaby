@@ -1,7 +1,20 @@
+import { io } from "https://cdn.socket.io/4.6.0/socket.io.esm.min.js";
+const socket = io();
+window.addEventListener("mousemove", (e) => {
+    socket.emit('mousePosition', { posX: e.clientX })
+})
+const FunkcjeSocketow = {
+    Dodano: socket.on('Dodano', (data) => {
+        console.log(`User added: ${data.Wiadomosc}`);
+    }),
+
+    Rozlaczenie: socket.on("disconnect", (data) => {
+        console.log(data.reason)
+    }),
+}
 import { GameObject } from "./main"
 import { allEvents } from "./ui"
 const allNetFunctions = {
-
     loginUser(userName) {
         return new Promise((resolve, reject) => {
             event.preventDefault();
@@ -59,7 +72,6 @@ const allNetFunctions = {
             },
         };
         let oczekiwanie = setInterval(() => {
-            console.log("tescik?");
             fetch("/waitplayer", options)
                 .then(response => response.json())
                 .then(data => {
@@ -75,4 +87,4 @@ const allNetFunctions = {
 
 }
 
-export { allNetFunctions }
+export { allNetFunctions, FunkcjeSocketow }

@@ -20,7 +20,6 @@ let plansza = {
                 let kostka = new Mesh(ksztalt, material)
                 kostka.position.set(j, 1, i)
                 kostka.userData.identyfikator = "p:" + j + ":" + i
-                console.log("IDENTYFIKATOR PODCZAS TWORZENIA: " + kostka.userData.identyfikator);
                 scene.add(kostka)
             }
         }
@@ -44,6 +43,7 @@ let plansza = {
 
 
                     warcab.userData.identyfikator = "w:" + count_r + ":" + count_col
+                    warcab.userData.pozycja = "w:" + count_r + ":" + count_col
                     scene.add(warcab)
 
                 }

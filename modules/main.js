@@ -57,7 +57,7 @@ const GameObject = {
 
             const intersects = raycaster.intersectObjects(scene.children);
             if (intersects.length > 0) {
-                console.log(typeof intersects[0].object.material.color.r);
+                console.log("TEST POZYCJI!: " + intersects[0].object.position.z);
                 if (intersects[0].object.material.color.r === 0) {
                     kolor_piona = "czarny"
                 }
@@ -69,6 +69,10 @@ const GameObject = {
                 // console.log("TO JEST PION: " + Object.keys(pion.userData));
                 GameObject.Podswietlenie_piona(kolor_piona, pion)
                 GameObject.Mozliweruchy(pion.userData.identyfikator, kolor_piona)
+                if (highlightedPawn && intersects[0].object.userData.identyfikator.split(":")[0] == "p") {
+                    console.log("a testuje sobie ruchy: " + typeof highlightedPawn);
+                    GameObject.Ruch(highlightedPawn)
+                }
             }
 
         });
@@ -91,6 +95,7 @@ const GameObject = {
                     }
                 })
             }
+            highlightedPawn = null
         }
         console.log("kolor piona: " + pion.material.color.r);
         if (kolor == kolor_piona) {
@@ -114,6 +119,7 @@ const GameObject = {
             })
         }
         console.log(scene.children.length);
+        let dodaj = true
         let pozycje = pozycja.split(":")
         let row = parseInt(pozycje[1])
         let col = parseInt(pozycje[2])
@@ -126,36 +132,44 @@ const GameObject = {
         if (kolor_pion == "czarny" && kolor == "czarny") {
             if (row != 7) {
                 if (col != 7) {
+                    let pokoloruj = null
+
                     let ruch_row = row + 1
                     let ruch_col = col + 1
                     let kordy = "p:" + ruch_row + ":" + ruch_col
-                    for (let i = 0; i < dlugosc; i++) {
-                        let obecne_id = scene.children[i].userData.identyfikator
-                        if (obecne_id == kordy) {
-                            console.log("POWINNO SIE ZMIENIC");
-                            scene.children[i].material.color.setRGB(0.55, 0.33, 0.22)
-                            podswietlane.push(kordy)
-
-                            break
-                        } else {
-                            console.log("NIE ZMIENIAJ SIE NO")
+                    let mozliwa_pozycja = "w:" + ruch_row + ":" + ruch_col
+                    for (const element of scene.children) {
+                        if (element.userData.identyfikator == kordy) {
+                            pokoloruj = element
                         }
+                        if (element.userData.pozycja == mozliwa_pozycja) {
+                            dodaj = false
+                        }
+                    }
+                    if (dodaj) {
+                        podswietlane.push(kordy)
+                        pokoloruj.material.color.setRGB(0.55, 0.33, 0.22)
                     }
                 }
                 if (col != 0) {
+                    let pokoloruj = null
+
                     let ruch_row = row + 1
                     let ruch_col = col - 1
                     let kordy = "p:" + ruch_row + ":" + ruch_col
-                    for (let i = 0; i < dlugosc; i++) {
-                        let obecne_id = scene.children[i].userData.identyfikator
-                        if (obecne_id == kordy) {
-                            console.log("POWINNO SIE ZMIENIC");
-                            scene.children[i].material.color.setRGB(0.55, 0.33, 0.22)
-                            podswietlane.push(kordy)
-                            break
-                        } else {
-                            console.log("NIE ZMIENIAJ SIE NO")
+                    let mozliwa_pozycja = "w:" + ruch_row + ":" + ruch_col
+
+                    for (const element of scene.children) {
+                        if (element.userData.identyfikator == kordy) {
+                            pokoloruj = element
                         }
+                        if (element.userData.pozycja == mozliwa_pozycja) {
+                            dodaj = false
+                        }
+                    }
+                    if (dodaj) {
+                        podswietlane.push(kordy)
+                        pokoloruj.material.color.setRGB(0.55, 0.33, 0.22)
                     }
                 }
             }
@@ -163,33 +177,52 @@ const GameObject = {
         if (kolor_pion == "bialy" && kolor == "bialy") {
             if (row != 0) {
                 if (col != 7) {
+                    let pokoloruj = null
+
                     let ruch_row = row - 1
                     let ruch_col = col + 1
                     let kordy = "p:" + ruch_row + ":" + ruch_col
+                    let mozliwa_pozycja = "w:" + ruch_row + ":" + ruch_col
+
                     for (const element of scene.children) {
                         if (element.userData.identyfikator == kordy) {
                             element.material.color.setRGB(0.55, 0.33, 0.22)
-                            podswietlane.push(kordy)
-
+                        }
+                        if (element.userData.pozycja == mozliwa_pozycja) {
+                            dodaj = false
                             break
                         }
                     }
+                    if (dodaj) {
+                        podswietlane.push(kordy)
+                    }
                 }
                 if (col != 0) {
+                    let pokoloruj = null
+                    dodaj = true
                     let ruch_row = row - 1
                     let ruch_col = col - 1
                     let kordy = "p:" + ruch_row + ":" + ruch_col
+                    let mozliwa_pozycja = "w:" + ruch_row + ":" + ruch_col
                     for (const element of scene.children) {
                         if (element.userData.identyfikator == kordy) {
                             element.material.color.setRGB(0.55, 0.33, 0.22)
-                            podswietlane.push(kordy)
-
+                        }
+                        if (element.userData.pozycja == kordy) {
+                            dodaj = false
                             break
                         }
+                    }
+                    if (dodaj) {
+                        podswietlane.push(kordy)
                     }
                 }
             }
         }
+    },
+
+    Ruch: function () {
+
     },
 
     UpdateCamera(odpowiedz) {

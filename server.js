@@ -1,6 +1,10 @@
 const express = require("express")
 const app = express()
+const http = require('http');
+const server = http.createServer(app)
 const PORT = 3000
+const { Server } = require("socket.io");
+const socketio = new Server(server);
 const path = require("path")
 const bodyParser = require('body-parser');
 app.use(express.json())
@@ -10,10 +14,32 @@ app.use(express.text())
 let users = []
 let waiting_users = []
 let odpowiedzi_kolory = { "istniejacy": "bialy" }
+socketio.on("connection", (client) => {
+    client.emit("Dodano", {
+        Wiadomosc: "lol"
+    })
+    client.on("disconnect", (reason) => {
+        console.log("klient się rozłącza", reason)
+    })
+
+    client.on("mousePosition", (data) => {
+        console.log(data.posX);
+    })
+
+})
+
+
+
+socketio.on("mouseposition", (data) => {
+    console.log(data)
+    socketio.emit("mouseposition", { posX: data.posX, posY: data.posY })
+})
 
 app.get("/", function (req, res) {
+
     res.sendFile("index.html")
 })
+
 
 app.post("/adduser", function (req, res) {
     res.header("content-type", "application/json")
@@ -29,10 +55,10 @@ app.post("/adduser", function (req, res) {
             res.send(JSON.stringify({ odp: odp, kolor: kolor, userName: userName }))
         }
         else if (users.length == 1) {
-            console.log("kurwa v2");
             let odp = "drugi"
             let kolor = "czarny"
             users.push(userName)
+            socketio.emit('Dodano', { userName })
             res.send(JSON.stringify({ odp: odp, kolor: kolor, userName: userName }))
         } else if (users.length > 1) {
             let odp = "duzo"
@@ -48,12 +74,14 @@ app.post("/adduser", function (req, res) {
 
 app.post("/waitplayer", function (req, res) {
     if (users.length > 1) {
+
+
         res.send(JSON.stringify({ odp: "start" }))
     } else {
         res.send(JSON.stringify({ odp: "czekaj" }))
     }
 })
 
-app.listen(PORT, function () {
+server.listen(PORT, function () {
     console.log("SERWER DZIALA NA PORCIE ", PORT);
 })
