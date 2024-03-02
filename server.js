@@ -15,7 +15,7 @@ let users = []
 let waiting_users = []
 let odpowiedzi_kolory = { "istniejacy": "bialy" }
 socketio.on("connection", (client) => {
-    client.emit("Dodano", {
+    client.emit("Dodanoe", {
         Wiadomosc: "lol"
     })
     client.on("disconnect", (reason) => {
@@ -24,6 +24,21 @@ socketio.on("connection", (client) => {
 
     client.on("mousePosition", (data) => {
         console.log(data.posX);
+    })
+    client.on('Ruszony', (data) => {
+        console.log("dataaaaa: " + data);
+        client.broadcast.emit("Animacja", { pole: data["pole"], warcab: data["warcab"], zbicie: data["zbicie"] })
+        client.emit
+    })
+
+    client.on("Start_gry", (data) => {
+        console.log("GRA ROZPOCZETA");
+        client.broadcast.emit("Start_timer", { timer: "start" })
+    })
+
+    client.on("Przegrana_czas", (data) => {
+        console.log("PRZEGRANO NA CZAS LOL");
+        client.broadcast.emit("Koniec_czas", { koniec: "koniec" })
     })
 
 })

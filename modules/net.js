@@ -1,16 +1,33 @@
 import { io } from "https://cdn.socket.io/4.6.0/socket.io.esm.min.js";
 const socket = io();
-window.addEventListener("mousemove", (e) => {
-    socket.emit('mousePosition', { posX: e.clientX })
-})
+
+
+
 const FunkcjeSocketow = {
-    Dodano: socket.on('Dodano', (data) => {
+    Dodano: socket.on('Dodanoe', (data) => {
         console.log(`User added: ${data.Wiadomosc}`);
     }),
 
     Rozlaczenie: socket.on("disconnect", (data) => {
         console.log(data.reason)
     }),
+
+    Ruszony: socket.on('Animacja', (data) => {
+        console.log("ANIMACJA DOSZLA: TERAZ DATA WARCAB: " + data["warcab"]);
+        console.log("ANIMACJA DOSZLA: TERAZ DATA ZBICIE: " + data["zbicie"]);
+        console.log("ANIMACJA DOSZLA: TERAZ DATA POLE[X]: " + data["pole"].x);
+        GameObject.Animacja(data["warcab"], data["pole"], data["zbicie"])
+    }),
+
+    Ruszenie: (warcab, pole, zbicie) => {
+        console.log("WYKONANO SIE, TO JEST DATA: " + warcab);
+        socket.emit('Ruszony', { warcab: warcab, pole: pole, zbicie: zbicie })
+    },
+
+    Start_gry: () => { socket.emit('Start_gry', (data) => { start: "tak" }) },
+    Start_timer: socket.on('Start_timer', (data) => { GameObject.Start_clock() }),
+    Przegrana_czas: () => { socket.emit('Przegrana_czas'), (data) => { przegrana: "przegrana" } },
+    Koniec_czas: socket.on("Koniec_czas", (data) => { GameObject.Wygrana_czas() })
 }
 import { GameObject } from "./main"
 import { allEvents } from "./ui"

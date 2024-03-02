@@ -4,6 +4,8 @@ import Pionek from './pionek'
 
 let bialy = new TextureLoader().load('./static/images/bialy.jpg')
 let czarny = new TextureLoader().load('./static/images/czarny.jpg')
+let czarny_pion = new TextureLoader().load('./static/images/czarny_pion.jpg')
+let bialy_pion = new TextureLoader().load('./static/images/bialy_pion.jpg')
 let material
 let plansza = {
     generacja_planszy() {
@@ -35,9 +37,14 @@ let plansza = {
                     let warcab = new Pionek(scene)
                     if (col == 1) {
                         warcab.material.color.set(0, 0, 0)
+                        warcab.material.map = czarny_pion
+                        console.log(warcab.material.map);
+
                     }
                     if (col == 2) {
                         warcab.material.color.set(255, 255, 255)
+                        warcab.material.map = bialy_pion
+                        console.log(warcab.material.map);
                     }
                     warcab.position.set(count_r, 1.2, count_col)
 
