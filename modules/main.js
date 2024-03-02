@@ -1,4 +1,4 @@
-import { Scene, Clock, Raycaster, Vector2, ArrowHelper } from 'three';
+import { Scene, Clock, Raycaster, Vector2, ArrowHelper, TextureLoader } from 'three';
 import Renderer from './renderer';
 import Camera from './camera';
 import TWEEN, { Tween, Easing } from '@tweenjs/tween.js';
@@ -8,8 +8,13 @@ let curr_tween
 let kolor
 let tura
 let podswietlane = []
-let timer = 5
+let timer = 30
 let countdown
+let czarna_tekstura = new TextureLoader().load('./static/images/czarny_pion.jpg')
+let bialy_tekstura = new TextureLoader().load('./static/images/bialy_pion.jpg')
+let czarna_tekstura_src = "http://localhost:3000/static/images/czarny_pion.jpg"
+let biala_tekstura_src = "http://localhost:3000/static/images/bialy_pion.jpg"
+let wybrany = new TextureLoader().load('./static/images/wybrany.jpg')
 const container = document.getElementById('root')
 const scene = new Scene()
 const renderer = new Renderer(scene, container)
@@ -68,20 +73,24 @@ const GameObject = {
 
                 const intersects = raycaster.intersectObjects(scene.children);
                 if (intersects.length > 0) {
-                    console.log("TEST POZYCJI!: " + intersects[0].object.position.y);
-                    if (intersects[0].object.material.color.r === 0) {
+
+                    if (intersects[0].object.material.map.image.src == czarna_tekstura_src) {
                         kolor_piona = "czarny"
+
+
                     }
-                    if (intersects[0].object.material.color.r === 255) {
+                    if (intersects[0].object.material.map.image.src == biala_tekstura_src) {
                         kolor_piona = "bialy"
+
+
                     }
                     let pion = intersects[0].object
                     if (pion.userData.identyfikator.split(":")[0] == "w") {
                         GameObject.Czyszczenie_pol()
                         podswietlane = []
-                        console.log("NO CO JEST KURWA");
+
                     }
-                    console.log(podswietlane + ": OBECNA TABLICA KURWA MACAIOFESUHFQ8F");
+
                     GameObject.Podswietlenie_piona(kolor_piona, pion)
 
                     GameObject.Mozliweruchy(pion.userData.identyfikator, kolor_piona)
@@ -97,7 +106,7 @@ const GameObject = {
     },
 
     Aktualizacja_indexu: function (ruszony) {
-        console.log("TO JEST RUSZONY WAZNE!!!!: " + ruszony);
+
         let index = podswietlane.indexOf(ruszony)
         let nowy_kord = podswietlane[index]
         nowy_kord = nowy_kord.split(":")
@@ -105,7 +114,7 @@ const GameObject = {
         nowy_kord = nowy_kord.join(":")
         highlightedPawn.userData.identyfikator = nowy_kord
         highlightedPawn = null
-        console.log(podswietlane);
+
     },
 
     Podswietlenie_piona(kolor_piona, pion) {
@@ -113,15 +122,14 @@ const GameObject = {
             if (kolor == "bialy") {
                 scene.children.forEach((element) => {
                     if (element.userData.identyfikator == highlightedPawn.userData.identyfikator) {
-                        element.material.color.set(255, 255, 255)
-
+                        element.material.map = bialy_tekstura
                     }
                 })
             }
             if (kolor == "czarny") {
                 scene.children.forEach((element) => {
                     if (element.userData.identyfikator == highlightedPawn.userData.identyfikator) {
-                        element.material.color.set(0, 0, 0)
+                        element.material.map = czarna_tekstura
                     }
                 })
             }
@@ -131,7 +139,7 @@ const GameObject = {
             scene.children.forEach((element) => {
                 if (element.userData.identyfikator == pion.userData.identyfikator) {
                     highlightedPawn = element
-                    element.material.color.setRGB(0.55, 0.55, 0.55)
+                    element.material.map = wybrany
                 }
             })
         }
@@ -161,11 +169,33 @@ const GameObject = {
                             pokoloruj = element
                         }
                         if (element.userData.identyfikator == mozliwa_pozycja) {
-                            dodaj = false
-                            // no jesli znajde taki element, to musze
+                            // no jesli znajde taki element, to musze najpierw sprawdzic gdzie chce zbijac
+                            let zbicie_row = ruch_row + 1
+                            let zbicie_col = ruch_col + 1
+                            let kordy_zbicia_warcab = "w:" + zbicie_row + ":" + zbicie_col
+                            let kordy_zbicia_pole = "p:" + zbicie_row + ":" + zbicie_col
+                            let mozliwosc_zbicia = true
+                            if (element.userData.kolor == kolor) {
+                                mozliwosc_zbicia = false
+                            }
+                            for (const warcaby of scene.children) {
+                                if (warcaby.userData.identyfikator == kordy_zbicia_warcab) {
+                                    mozliwosc_zbicia = false
+                                }
+                            }
+                            if (mozliwosc_zbicia == false) {
+                                dodaj = false
+                            } else {
+                                console.log("POPRZEDNIE KORDY!!!!: " + kordy);
+                                kordy = kordy_zbicia_pole
+                                console.log("WYKRYTO KORDY ZBICIA!!");
+                                console.log("CZEMU MI SIE NIE ROBI??KORDYZBICIA: " + kordy_zbicia_warcab);
+                                console.log("NOWE KORDY POWINNO BYC BICIE: " + kordy);
+                            }
                         }
                     }
                     if (dodaj) {
+                        console.log("PUSHOWANE KORDY!!! " + kordy);
                         podswietlane.push(kordy)
                         pokoloruj.material.color.setRGB(0.55, 0.33, 0.22)
                     }
@@ -183,10 +213,35 @@ const GameObject = {
                             pokoloruj = element
                         }
                         if (element.userData.identyfikator == mozliwa_pozycja) {
-                            dodaj = false
+                            // no jesli znajde taki element, to musze najpierw sprawdzic gdzie chce zbijac
+                            let zbicie_row = ruch_row + 1
+                            let zbicie_col = ruch_col - 1
+                            let kordy_zbicia_warcab = "w:" + zbicie_row + ":" + zbicie_col
+                            let kordy_zbicia_pole = "p:" + zbicie_row + ":" + zbicie_col
+
+                            let mozliwosc_zbicia = true
+                            if (element.userData.kolor == kolor) {
+                                mozliwosc_zbicia = false
+                            }
+                            for (const warcaby of scene.children) {
+                                if (warcaby.userData.identyfikator == kordy_zbicia_warcab) {
+                                    mozliwosc_zbicia = false
+                                }
+                            }
+                            if (mozliwosc_zbicia == false) {
+                                dodaj = false
+                            } else {
+                                kordy = kordy_zbicia_warcab
+                                console.log("POPRZEDNIE KORDY!!!!: " + kordy);
+                                kordy = kordy_zbicia_pole
+                                console.log("CZEMU MI SIE NIE ROBI??KORDYZBICIA: " + kordy_zbicia_warcab);
+                                console.log("CZEMU MI SIE NIE ROBI??");
+                                console.log("NOWE KORDY POWINNO BYC BICIE: " + kordy);
+                            }
                         }
                     }
                     if (dodaj) {
+                        console.log("PUSHOWANE KORDY!!! " + kordy);
                         podswietlane.push(kordy)
                         pokoloruj.material.color.setRGB(0.55, 0.33, 0.22)
                     }
@@ -276,22 +331,18 @@ const GameObject = {
                     selectedObject.position.z = targetPosition.z;
                 })
                 .onComplete(() => {
-                    console.log("koniec animacji");
+
                 })
                 .start();
             curr_tween = tween;
             FunkcjeSocketow.Ruszenie(pion, pozycje, "nie")
             tura = "przeciwnik"
             clearInterval(countdown)
-            timer = 5
+            timer = 30
         }
     },
 
     Ruch_przeciwnik: function (pion, pozycje, zbicie) {
-        console.log("CZY RUCH DOSZEDDL?");
-        console.log("PION: " + pion.userData);
-        console.log("POZYCJE: " + pozycje);
-        console.log("zbicie: " + zbicie);
         const uniqueIdentifier = pion.userData.identyfikator;
         const selectedObject = scene.children.find(obj => obj.userData.identyfikator === uniqueIdentifier);
 
@@ -311,7 +362,7 @@ const GameObject = {
                     selectedObject.position.z = targetPosition.z;
                 })
                 .onComplete(() => {
-                    console.log("koniec animacji");
+
                 })
                 .start();
             curr_tween = tween;
@@ -330,7 +381,7 @@ const GameObject = {
                     clearInterval(countdown)
                 }
                 timer -= 1
-                console.log(timer);
+
             }, 1000);
         }
     },
@@ -342,10 +393,7 @@ const GameObject = {
     },
 
     Animacja: function (warcab, pole, zbicie) {
-        console.log("ANIMACJA DATA WARCAB: " + zbicie);
-        console.log("ANIMACJA DATA POLE: " + pole);
-        console.log("ANIMACJA DATA ZBICIE: " + warcab);
-        console.log("KLUCZE OBIEKTU WARCAB: " + Object.keys(warcab.object));
+
         GameObject.Ruch_przeciwnik(warcab.object, pole, zbicie)
     },
 
@@ -359,7 +407,7 @@ const GameObject = {
                     clearInterval(countdown)
                 }
                 timer -= 1
-                console.log(timer);
+
             }, 1000);
         }
     },

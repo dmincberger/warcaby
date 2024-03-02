@@ -36,15 +36,18 @@ let plansza = {
                 if (col != 0) {
                     let warcab = new Pionek(scene)
                     if (col == 1) {
-                        warcab.material.color.set(0, 0, 0)
+
                         warcab.material.map = czarny_pion
-                        console.log(warcab.material.map);
+                        warcab.userData.kolor = "czarny"
+                        console.log(warcab.material.map.image.src);
 
                     }
                     if (col == 2) {
-                        warcab.material.color.set(255, 255, 255)
+
                         warcab.material.map = bialy_pion
-                        console.log(warcab.material.map);
+                        warcab.userData.kolor = "bialy"
+                        console.log(warcab.material.map.image.src);
+                        warcab.material.map.transparent
                     }
                     warcab.position.set(count_r, 1.2, count_col)
 
