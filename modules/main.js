@@ -405,6 +405,7 @@ const GameObject = {
         const uniqueIdentifier = pion.userData.identyfikator;
         const selectedObject = scene.children.find(obj => obj.userData.identyfikator === uniqueIdentifier);
         let do_zbicia = null
+        let do_zbicia_info = null
         let pierwszy = true
         if (selectedObject) {
             let tescik = selectedObject.position.x
@@ -412,19 +413,20 @@ const GameObject = {
             let glob = tescik - tescik_pozycje
             if (Math.abs(glob) > 1) {
                 if (potencjalne_zbicie.length == 1) {
-                    // do_zbicia = potencjalne_zbicie[0]
-                    scene.remove(potencjalne_zbicie[0])
+                    do_zbicia_info = potencjalne_zbicie[0].userData.identyfikator
+                    do_zbicia = potencjalne_zbicie[0]
+                    console.log("TUTAJ JEST PROBLEM??: " + do_zbicia_info);
                 }
                 if (potencjalne_zbicie.length > 1) {
                     let pozycja_z = parseInt(pozycje.z)
                     let pion_z = parseInt(potencjalne_zbicie[0].position.z)
                     let odleglosc = pozycja_z - pion_z
                     if (odleglosc == 1) {
-                        scene.remove(potencjalne_zbicie[0])
+                        do_zbicia = potencjalne_zbicie[0]
+                        do_zbicia_info = potencjalne_zbicie[0].userData.identyfikator
                     } else {
-                        // do_zbicia = potencjalne_zbicie[0]
-                        scene.remove(potencjalne_zbicie[1])
-                        pierwszy = false
+                        do_zbicia = potencjalne_zbicie[1]
+                        do_zbicia_info = potencjalne_zbicie[1].userData.identyfikator
                     }
                 }
             }
@@ -445,20 +447,15 @@ const GameObject = {
 
                 })
                 .start();
-            if (pierwszy) {
-                do_zbicia = potencjalne_zbicie[0]
-                potencjalne_zbicie = []
-
-            } else {
-                do_zbicia = potencjalne_zbicie[1]
-                potencjalne_zbicie = []
-
-            }
             curr_tween = tween;
-            FunkcjeSocketow.Ruszenie(pion, pozycje, do_zbicia)
+            FunkcjeSocketow.Ruszenie(pion, pozycje, do_zbicia_info)
             tura = "przeciwnik"
             clearInterval(countdown)
             timer = 30
+            scene.remove(do_zbicia)
+            potencjalne_zbicie = []
+            do_zbicia_info = null
+            do_zbicia = null
         }
     },
 
@@ -468,7 +465,12 @@ const GameObject = {
         const selectedObject = scene.children.find(obj => obj.userData.identyfikator === uniqueIdentifier);
         if (selectedObject) {
             if (zbicie != null) {
-                scene.remove(zbicie)
+                for (const element of scene.children) {
+                    if (element.userData.identyfikator == zbicie) {
+                        scene.remove(element)
+                        break
+                    }
+                }
             } else {
             }
             const targetPosition = { x: selectedObject.position.x, y: selectedObject.position.y, z: selectedObject.position.z };
@@ -501,7 +503,9 @@ const GameObject = {
                     FunkcjeSocketow.Przegrana_czas()
                     tura = "przeciwnik"
                     clearInterval(countdown)
+                    console.log("PRZEGRALES NA CZAS :(");
                 }
+                console.log(timer);
                 timer -= 1
             }, 1000);
         }
@@ -510,6 +514,7 @@ const GameObject = {
     Wygrana_czas: function () {
         tura = "przeciwnik"
         clearInterval(countdown)
+        console.log("GRATULACJE WYGRALES NA CZAS");
     },
 
     Animacja: function (warcab, pole, zbicie) {
@@ -525,6 +530,7 @@ const GameObject = {
                     tura = "przeciwnik"
                     clearInterval(countdown)
                 }
+                console.log(timer);
                 timer -= 1
             }, 1000);
         }

@@ -16,10 +16,10 @@ let waiting_users = []
 let odpowiedzi_kolory = { "istniejacy": "bialy" }
 socketio.on("connection", (client) => {
     client.emit("Dodanoe", {
-        Wiadomosc: "lol "
+        Wiadomosc: client.id
     })
     client.on("disconnect", (reason) => {
-        console.log("klient się rozłącza", reason)
+        console.log("klient się rozłącza", reason, client.id)
     })
 
     client.on("mousePosition", (data) => {
