@@ -11,7 +11,7 @@ let curr_tween
 let kolor
 let tura
 let podswietlane = []
-let timer = 5
+let timer = 30
 let countdown
 let czarna_tekstura = new TextureLoader().load('./static/images/czarny_pion.jpg')
 let bialy_tekstura = new TextureLoader().load('./static/images/bialy_pion.jpg')
