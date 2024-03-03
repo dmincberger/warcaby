@@ -32,7 +32,9 @@ const FunkcjeSocketow = {
     Start_timer: socket.on('Start_timer', (data) => { GameObject.Start_clock() }),
     Przegrana_czas: () => { socket.emit('Przegrana_czas'), (data) => { przegrana: "przegrana" } },
     Koniec_czas: socket.on("Koniec_czas", (data) => { GameObject.Wygrana_czas() }),
-    Zamknij_modal: () => { socket.emit("Zamknij_modal"), (data) => { zamknij: "morde" } }
+    Zamknij_modal: () => { socket.emit("Zamknij_modal"), (data) => { zamknij: "morde" } },
+    Koniec_gry: () => { socket.emit("Koniec_gry"), (data) => { zamknij: "morde" } },
+    Koniec_gry_przegrana: () => { socket.on('Koniec_przegrana', (data) => { allEvents.Koniec_gry_przegrana() }) }
 }
 
 const allNetFunctions = {

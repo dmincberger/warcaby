@@ -90,6 +90,16 @@ const allEvents = {
         document.getElementById("czekanie").close()
     },
 
+    Koniec_gry_wygrana() {
+        document.getElementById("koniec").showModal()
+        document.getElementById("koniec_tekst").innerHTML = "WYGRALES!!"
+    },
+
+    Koniec_gry_przegrana() {
+        document.getElementById("koniec").showModal()
+        document.getElementById("koniec_tekst").innerHTML = "PRZEGRALES"
+    },
+
     Przegrana_czas() {
         console.log("PRZEGRANA SIĘ WYKONUJE PRZECIEŻŻ");
         let status = document.getElementById("status")

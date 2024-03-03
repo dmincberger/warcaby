@@ -47,6 +47,8 @@ const pionki = [
     [2, 0, 2, 0, 2, 0, 2, 0]
 ]
 
+
+
 const GameObject = {
 
     ustawienie_koloru(odpowiedz) {
@@ -456,6 +458,7 @@ const GameObject = {
             potencjalne_zbicie = []
             do_zbicia_info = null
             do_zbicia = null
+            // GameObject.Win_check()
             allEvents.tura_przeciwnika()
         }
     },
@@ -543,6 +546,25 @@ const GameObject = {
             }, 1000);
         } else {
         }
+    },
+
+    Win_check() {
+        if (kolor == "bialy") {
+            for (const element of scene.children) {
+                if (element.material.map.img.src == biala_tekstura_src) {
+                    return 0
+                }
+            }
+        } else {
+            for (const element of scene.children) {
+                if (element.material.map.img.src == czarna_tekstura_src) {
+                    return 0
+                }
+            }
+        }
+        allEvents.Koniec_gry_wygrana()
+        FunkcjeSocketow.Koniec_gry()
+        return 1
     },
 
     UpdateCamera(odpowiedz) {

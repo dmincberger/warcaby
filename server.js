@@ -31,6 +31,10 @@ socketio.on("connection", (client) => {
         client.emit
     })
 
+    client.on('Koniec_gry', (data) => {
+        client.broadcast.emit("Koniec_przegrana", { data: "hihi" })
+    })
+
     client.on("Start_gry", (data) => {
         console.log("GRA ROZPOCZETA");
         client.broadcast.emit("Start_timer", { timer: "start" })

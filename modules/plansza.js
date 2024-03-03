@@ -47,7 +47,7 @@ let plansza = {
                         warcab.material.map = bialy_pion
                         warcab.userData.kolor = "bialy"
                         console.log(warcab.material.map.image.src);
-                        warcab.material.map.transparent
+                        console.log(warcab.material.map.image.src + ": IMAGE");
                     }
                     warcab.position.set(count_r, 1.2, count_col)
 
