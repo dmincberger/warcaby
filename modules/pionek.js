@@ -5,7 +5,7 @@ import { scene, szachownica } from './main'
 export default class Pionek {
     constructor(scene) {
         this.scene = scene
-        this.geometry = new CylinderGeometry(0.2, 0.2, 0.2)
+        this.geometry = new CylinderGeometry(0.4, 0.2, 0.4)
         this.material = new MeshBasicMaterial()
         const pion = new Mesh(this.geometry, this.material)
         console.log(pion.type);

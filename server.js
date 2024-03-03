@@ -41,6 +41,10 @@ socketio.on("connection", (client) => {
         client.broadcast.emit("Koniec_czas", { koniec: "koniec" })
     })
 
+    client.on("Zamknij_modal", (data) => {
+        client.broadcast.emit("Zamykanie_modal", { zamknij: "morde" })
+    })
+
 })
 
 

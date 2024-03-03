@@ -3,6 +3,7 @@ import Renderer from './renderer';
 import Camera from './camera';
 import TWEEN, { Tween, Easing } from '@tweenjs/tween.js';
 import { FunkcjeSocketow } from './net';
+import { allEvents } from './ui';
 let potencjalne_zbicie = []
 let zbicie_holder
 let highlightedPawn = null;
@@ -10,7 +11,7 @@ let curr_tween
 let kolor
 let tura
 let podswietlane = []
-let timer = 30
+let timer = 5
 let countdown
 let czarna_tekstura = new TextureLoader().load('./static/images/czarny_pion.jpg')
 let bialy_tekstura = new TextureLoader().load('./static/images/bialy_pion.jpg')
@@ -90,7 +91,6 @@ const GameObject = {
                     if (pion.userData.identyfikator.split(":")[0] == "w") {
                         GameObject.Czyszczenie_pol()
                         podswietlane = []
-
                     }
 
                     GameObject.Podswietlenie_piona(kolor_piona, pion)
@@ -456,6 +456,7 @@ const GameObject = {
             potencjalne_zbicie = []
             do_zbicia_info = null
             do_zbicia = null
+            allEvents.tura_przeciwnika()
         }
     },
 
@@ -500,6 +501,7 @@ const GameObject = {
             tura = "twoja"
             countdown = setInterval(() => {
                 if (timer < 1) {
+                    allEvents.Przegrana_czas()
                     FunkcjeSocketow.Przegrana_czas()
                     tura = "przeciwnik"
                     clearInterval(countdown)
@@ -507,6 +509,7 @@ const GameObject = {
                 }
                 console.log(timer);
                 timer -= 1
+                allEvents.twoja_tura(timer)
             }, 1000);
         }
     },
@@ -515,6 +518,7 @@ const GameObject = {
         tura = "przeciwnik"
         clearInterval(countdown)
         console.log("GRATULACJE WYGRALES NA CZAS");
+        allEvents.Wygrana_czas()
     },
 
     Animacja: function (warcab, pole, zbicie) {
@@ -526,13 +530,18 @@ const GameObject = {
         if (kolor == "bialy") {
             countdown = setInterval(() => {
                 if (timer < 1) {
+                    allEvents.Przegrana_czas()
+                    console.log("TESTETOKETKOWO CZAS");
                     FunkcjeSocketow.Przegrana_czas()
                     tura = "przeciwnik"
                     clearInterval(countdown)
+                } else {
+                    console.log(timer);
+                    timer -= 1
+                    allEvents.twoja_tura(timer)
                 }
-                console.log(timer);
-                timer -= 1
             }, 1000);
+        } else {
         }
     },
 
@@ -547,6 +556,7 @@ const GameObject = {
             camera.threeCamera.rotation.set(5, Math.PI - 1, 0);
             camera.threeCamera.lookAt(0, 3.3, 3);
             FunkcjeSocketow.Start_gry()
+            allEvents.tura_przeciwnika()
         }
     }
 

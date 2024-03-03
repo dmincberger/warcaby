@@ -1,4 +1,6 @@
 import { io } from "https://cdn.socket.io/4.6.0/socket.io.esm.min.js";
+import { GameObject } from "./main"
+import { allEvents } from "./ui"
 const socket = io();
 
 
@@ -17,6 +19,10 @@ const FunkcjeSocketow = {
         GameObject.Animacja(data["warcab"], data["pole"], data["zbicie"])
     }),
 
+    Zamykanie_modal: socket.on('Zamykanie_modal', (data) => {
+        allEvents.Zamknij_modal()
+    }),
+
     Ruszenie: (warcab, pole, zbicie) => {
         console.log("WYKONANO SIE, TO JEST DATA: " + zbicie);
         socket.emit('Ruszony', { warcab: warcab, pole: pole, zbicie: zbicie })
@@ -25,10 +31,10 @@ const FunkcjeSocketow = {
     Start_gry: () => { socket.emit('Start_gry', (data) => { start: "tak" }) },
     Start_timer: socket.on('Start_timer', (data) => { GameObject.Start_clock() }),
     Przegrana_czas: () => { socket.emit('Przegrana_czas'), (data) => { przegrana: "przegrana" } },
-    Koniec_czas: socket.on("Koniec_czas", (data) => { GameObject.Wygrana_czas() })
+    Koniec_czas: socket.on("Koniec_czas", (data) => { GameObject.Wygrana_czas() }),
+    Zamknij_modal: () => { socket.emit("Zamknij_modal"), (data) => { zamknij: "morde" } }
 }
-import { GameObject } from "./main"
-import { allEvents } from "./ui"
+
 const allNetFunctions = {
     loginUser(userName) {
         return new Promise((resolve, reject) => {
@@ -75,7 +81,6 @@ const allNetFunctions = {
 
             })
             .catch(error => console.log(error));
-
 
     },
 

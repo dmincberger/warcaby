@@ -1,4 +1,4 @@
-import { allNetFunctions } from "./net";
+import { allNetFunctions, FunkcjeSocketow } from "./net";
 import Camera from './camera.js'
 import { plansza } from "./plansza";
 import { GameObject } from "./main";
@@ -52,9 +52,11 @@ const allEvents = {
             plansza.generacja_pionkow(odpowiedz["odp"])
             GameObject.Start_ruszania()
             GameObject.ustawienie_koloru(odpowiedz["kolor"])
+            FunkcjeSocketow.Zamknij_modal()
         }
         if (odpowiedz["odp"] == "istniejacy") {
             document.getElementById("status").innerHTML = "Uzytkownik juz istnieje!"
+
         }
         if (odpowiedz["odp"] == "duzo") {
             document.getElementById("status").innerHTML = "Za duzo uzytkownikow juz jest!"
@@ -67,7 +69,34 @@ const allEvents = {
 
     startgry() {
         document.getElementById("czekanie").close()
-    }
+    },
+
+    twoja_tura(timer) {
+        let status = document.getElementById("status")
+        status.innerHTML = "TWOJA TURA\nZostało ci: " + timer + "s"
+    },
+
+    tura_przeciwnika() {
+        let status = document.getElementById("status")
+        status.innerHTML = "OBECNIE JEST TURA PRZECIWNIKA"
+    },
+
+    Wygrana_czas() {
+        let status = document.getElementById("status")
+        status.innerHTML = "WYGRANA POPRZEZ BRAK RUCHU PRZECIWNIKA"
+    },
+
+    Zamknij_modal() {
+        document.getElementById("czekanie").close()
+    },
+
+    Przegrana_czas() {
+        console.log("PRZEGRANA SIĘ WYKONUJE PRZECIEŻŻ");
+        let status = document.getElementById("status")
+        console.log(status.innerHTML + "STATUS PRZED ZMIANIE");
+        status.innerHTML = "PRZEGRANA PONIEWAŻ NIE WYKONAŁEŚ RUCHU"
+        console.log(status.innerHTML + "STATUS PO ZMIANIE");
+    },
 
 }
 
