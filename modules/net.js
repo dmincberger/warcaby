@@ -13,14 +13,12 @@ const FunkcjeSocketow = {
     }),
 
     Ruszony: socket.on('Animacja', (data) => {
-        console.log("ANIMACJA DOSZLA: TERAZ DATA WARCAB: " + data["warcab"]);
-        console.log("ANIMACJA DOSZLA: TERAZ DATA ZBICIE: " + data["zbicie"]);
-        console.log("ANIMACJA DOSZLA: TERAZ DATA POLE[X]: " + data["pole"].x);
+        // console.log("SPRAWDZ KURWA DATAZBICIEFPOJWEEJIEWWIJWEJI: " + data["zbicie"]);
         GameObject.Animacja(data["warcab"], data["pole"], data["zbicie"])
     }),
 
     Ruszenie: (warcab, pole, zbicie) => {
-        console.log("WYKONANO SIE, TO JEST DATA: " + warcab);
+        console.log("WYKONANO SIE, TO JEST DATA: " + zbicie);
         socket.emit('Ruszony', { warcab: warcab, pole: pole, zbicie: zbicie })
     },
 

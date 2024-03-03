@@ -16,7 +16,7 @@ let waiting_users = []
 let odpowiedzi_kolory = { "istniejacy": "bialy" }
 socketio.on("connection", (client) => {
     client.emit("Dodanoe", {
-        Wiadomosc: "lol"
+        Wiadomosc: "lol "
     })
     client.on("disconnect", (reason) => {
         console.log("klient się rozłącza", reason)
@@ -26,7 +26,7 @@ socketio.on("connection", (client) => {
         console.log(data.posX);
     })
     client.on('Ruszony', (data) => {
-        console.log("dataaaaa: " + data);
+        console.log("dataaaaa: " + data["zbicie"]);
         client.broadcast.emit("Animacja", { pole: data["pole"], warcab: data["warcab"], zbicie: data["zbicie"] })
         client.emit
     })
