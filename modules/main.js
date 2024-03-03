@@ -37,16 +37,25 @@ const szachownica = [
 ]
 
 const pionki = [
-    [0, 1, 0, 1, 0, 1, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 2, 0, 2, 0, 2, 0, 2],
+    [0, 0, 2, 0, 2, 0, 2, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 2, 0, 2, 0, 2, 0, 2],
     [2, 0, 2, 0, 2, 0, 2, 0]
 ]
-
+// const pionki = [
+//     [0, 1, 0, 1, 0, 1, 0, 1],
+//     [1, 0, 1, 0, 1, 0, 1, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 2, 0, 2, 0, 2, 0, 2],
+//     [2, 0, 2, 0, 2, 0, 2, 0]
+// ]
 
 
 const GameObject = {
@@ -458,7 +467,7 @@ const GameObject = {
             potencjalne_zbicie = []
             do_zbicia_info = null
             do_zbicia = null
-            // GameObject.Win_check()
+            GameObject.Win_check()
             allEvents.tura_przeciwnika()
         }
     },
@@ -504,11 +513,15 @@ const GameObject = {
             tura = "twoja"
             countdown = setInterval(() => {
                 if (timer < 1) {
-                    allEvents.Przegrana_czas()
                     FunkcjeSocketow.Przegrana_czas()
                     tura = "przeciwnik"
                     clearInterval(countdown)
                     console.log("PRZEGRALES NA CZAS :(");
+                    FunkcjeSocketow.Reset_gry()
+                    allEvents.Przegrana_czas()
+                    setTimeout(() => {
+                        location.reload()
+                    }, 3000);
                 }
                 console.log(timer);
                 timer -= 1
@@ -522,6 +535,9 @@ const GameObject = {
         clearInterval(countdown)
         console.log("GRATULACJE WYGRALES NA CZAS");
         allEvents.Wygrana_czas()
+        setTimeout(() => {
+            location.reload()
+        }, 3000);
     },
 
     Animacja: function (warcab, pole, zbicie) {
@@ -537,7 +553,12 @@ const GameObject = {
                     console.log("TESTETOKETKOWO CZAS");
                     FunkcjeSocketow.Przegrana_czas()
                     tura = "przeciwnik"
+                    console.log("KURWAAAAAAAAAAAAAAAAA");
                     clearInterval(countdown)
+                    FunkcjeSocketow.Reset_gry()
+                    setTimeout(() => {
+                        location.reload()
+                    }, 3000);
                 } else {
                     console.log(timer);
                     timer -= 1
@@ -545,26 +566,35 @@ const GameObject = {
                 }
             }, 1000);
         } else {
+            allEvents.tura_przeciwnika()
         }
     },
 
     Win_check() {
-        if (kolor == "bialy") {
+        if (kolor == "czarny") {
+            console.log("ZACZETO PETLE U CZARNYCH");
             for (const element of scene.children) {
-                if (element.material.map.img.src == biala_tekstura_src) {
+                if (element.material.map.image.src == biala_tekstura_src) {
+                    console.log("ZNALAZLEM: " + element.material.map.image.src + " :U BIALYCH");
                     return 0
                 }
             }
         } else {
+            console.log("ZACZETO PETLE U BIALYCH");
             for (const element of scene.children) {
-                if (element.material.map.img.src == czarna_tekstura_src) {
+                if (element.material.map.image.src == czarna_tekstura_src) {
+                    console.log("ZNALAZLEM: " + element.material.map.image.src + " :U CZARNYCH");
                     return 0
                 }
             }
         }
+        console.log("HALO WYKONALEM SIE NO");
         allEvents.Koniec_gry_wygrana()
         FunkcjeSocketow.Koniec_gry()
-        return 1
+        FunkcjeSocketow.Reset_gry()
+        setTimeout(() => {
+            location.reload()
+        }, 3000);
     },
 
     UpdateCamera(odpowiedz) {

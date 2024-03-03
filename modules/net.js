@@ -34,7 +34,11 @@ const FunkcjeSocketow = {
     Koniec_czas: socket.on("Koniec_czas", (data) => { GameObject.Wygrana_czas() }),
     Zamknij_modal: () => { socket.emit("Zamknij_modal"), (data) => { zamknij: "morde" } },
     Koniec_gry: () => { socket.emit("Koniec_gry"), (data) => { zamknij: "morde" } },
-    Koniec_gry_przegrana: () => { socket.on('Koniec_przegrana', (data) => { allEvents.Koniec_gry_przegrana() }) }
+    Koniec_gry_przegrana: socket.on('Koniec_przegrana', (data) => { allEvents.Koniec_gry_przegrana() }),
+    Reset_gry: () => {
+        console.log("RESETUJE KLIENT");
+        socket.emit('Reset_gry', (data) => { lol: "lol" })
+    }
 }
 
 const allNetFunctions = {
@@ -62,7 +66,7 @@ const allNetFunctions = {
                 })
                 .then(data => {
                     console.log(data);
-                    if (data["odp"] === "dodany" || data["odp"] === "drugi" || data["odp"] === "duzo") {
+                    if (data["odp"] === "dodany" || data["odp"] === "drugi" || data["odp"] === "duzo" || data["odp"] === "istniejacy") {
                         resolve(data);
                     } else {
                         reject(new Error('Response not "dodany" or drugi'));

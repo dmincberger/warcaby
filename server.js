@@ -49,6 +49,11 @@ socketio.on("connection", (client) => {
         client.broadcast.emit("Zamykanie_modal", { zamknij: "morde" })
     })
 
+    client.on('Reset_gry', (data) => {
+        console.log("RESETUJE");
+        users = []
+    })
+
 })
 
 

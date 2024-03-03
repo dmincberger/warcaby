@@ -19,6 +19,12 @@ nav {
     overflow: hidden;
 }
 
+#koniec {
+    margin: auto;
+    scroll-behavior: unset;
+    overflow: hidden;
+}
+
 #status {
     font-size: 2.5em;
 }

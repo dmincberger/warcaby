@@ -21,13 +21,7 @@ const allEvents = {
 
         let resetbt = document.getElementById("resetbt");
         resetbt.addEventListener("click", async function () {
-            try {
-                console.log("resetBt");
-                let resetData = await allNetFunctions.resetUsers();
-
-            } catch (error) {
-                console.error("Error during reset:", error);
-            }
+            FunkcjeSocketow.Reset_gry()
         });
     },
 
@@ -98,6 +92,9 @@ const allEvents = {
     Koniec_gry_przegrana() {
         document.getElementById("koniec").showModal()
         document.getElementById("koniec_tekst").innerHTML = "PRZEGRALES"
+        setTimeout(() => {
+            location.reload()
+        }, 3000);
     },
 
     Przegrana_czas() {
